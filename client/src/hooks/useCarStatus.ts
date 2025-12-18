@@ -5,7 +5,7 @@ export function useCarStatus() {
   return useQuery({
     queryKey: ['car-status'],
     queryFn: carApi.getCarStatus,
-    refetchInterval: 3000,
+    refetchInterval: 2000,
   });
 };
 
