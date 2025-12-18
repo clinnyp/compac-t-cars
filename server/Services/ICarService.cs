@@ -4,4 +4,5 @@ public interface ICarService
 {
     Task<JsonNode> GetCarStatus();
     Task ToggleCharging(bool isCharging);
+    Task ScheduleCharge(DateTime scheduleCharge);
 }

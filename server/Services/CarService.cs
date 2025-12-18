@@ -26,7 +26,7 @@ public class CarService : ICarService
 
         var jsonReportedProperties = reportedProperties.ToJson();
         var carStatus = JsonNode.Parse(jsonReportedProperties);
-        return carStatus;
+        return carStatus ?? new JsonObject();
     }
 
     public async Task ToggleCharging(bool isCharging)
@@ -35,5 +35,12 @@ public class CarService : ICarService
         method.SetPayloadJson(JsonSerializer.Serialize(isCharging));
 
         await _serviceClient.InvokeDeviceMethodAsync("simDevice", method);
+    }
+
+    public async Task ScheduleCharge(DateTime scheduleCharge)
+    {
+        var twin = await _registryManager.GetTwinAsync("simDevice");
+        twin.Properties.Desired["scheduleCharge"] = scheduleCharge;
+        await _registryManager.UpdateTwinAsync("simDevice", twin, twin.ETag);
     }
 }

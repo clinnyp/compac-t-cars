@@ -12,6 +12,7 @@ public class CarFunctions
     private readonly ILogger<CarFunctions> _logger;
     private readonly ICarService _carService;
     public record ChargingActionRequest(bool isCharging);
+    public record ScheduleChargeRequest(DateTime scheduledCharge);
 
     public CarFunctions(ILogger<CarFunctions> logger, ICarService carService)
     {
@@ -43,5 +44,14 @@ public class CarFunctions
 
         await _carService.ToggleCharging(body.isCharging); 
         return new OkObjectResult(new { message = $"{(body.isCharging ? "Started" : "Stopped")} charging." });
+    }
+
+    [Function("ScheduleCharge")]
+    public async Task<IActionResult> ScheduleCharge([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule-charge")] HttpRequest req)
+    {
+        _logger.LogInformation("Scheduled charge...");
+        var body = await req.ReadFromJsonAsync<ScheduleChargeRequest>();
+        await _carService.ScheduleCharge(body.scheduledCharge);
+        return new OkObjectResult(new { message = $"Scheduled charge for {body.scheduledCharge.ToString("HH:mm")}." });
     }
 }
