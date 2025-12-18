@@ -2,10 +2,20 @@ import { useCarStatus } from "@/hooks/useCarStatus";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { CalendarClock } from "lucide-react";
+import { useToggleCharging } from "@/hooks/useCarStatus";
 
 
 export default function CardStatusCard() {
   const { data: carStatus, isLoading, error } = useCarStatus();
+  const toggleChargingMutation = useToggleCharging();
+
+  const isCharging = carStatus?.isCharging ?? false;
+
+  const handleToggleCharging = () => {
+    toggleChargingMutation.mutate(!isCharging);
+  }
+
 
   return (
     <div className="flex justify-around items-center bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-lg p-4 shadow-md">
@@ -25,11 +35,12 @@ export default function CardStatusCard() {
           {carStatus && `Battery: ${carStatus.batteryLevel}% | Charging: ${carStatus.isCharging ? 'Yes' : 'No'}`}
         </p>
         <Button variant="outline">
+          <CalendarClock size={16} />
           Schedule Charge
         </Button>
       </div>
       <div>
-        <Switch id="charging-status" />
+        <Switch id="charging-status" checked={isCharging} onCheckedChange={handleToggleCharging} disabled={isLoading} />
         <Label className="text-sm text-gray-600 font-bold uppercase" htmlFor="charging-status">Charge</Label>
       </div>
     </div>
