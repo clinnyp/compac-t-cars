@@ -15,4 +15,14 @@ export const carApi = {
     });
     return response.json();
   },
+  scheduleCharge: async (scheduledCharge: Date) => {
+    const response = await fetch(`${API_BASE_URL}/schedule-charge`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ scheduledCharge }),
+    });
+    return response.json();
+  },
 }

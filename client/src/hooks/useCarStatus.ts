@@ -22,3 +22,17 @@ export function useToggleCharging() {
     },
   });
 };
+
+export function useScheduleCharge() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (scheduledCharge: Date) => carApi.scheduleCharge(scheduledCharge),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['car-status'] });
+    },
+    onError: (error) => {
+      console.error('Failed to schedule charge', error);
+    },
+  });
+};
