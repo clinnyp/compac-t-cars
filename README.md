@@ -1,4 +1,4 @@
-# Compac-T-Cars
+# iot-electric-vehicle-charging-management-system
 
 IoT application for monitoring and controlling electric vehicle charging via Azure IoT Hub. Features real-time battery monitoring, manual charging control, and scheduled charging.
 
